@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'/>
+		<!--[if lt IE 9]>
+			<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		 <meta name="viewport" content="width=device-width, user-scalable=false;">
+		<script src='underscore-min.js'></script>
+		<script src='https://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.js'></script>
+		<link href='https://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
+		<link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+		<link href='styles.css' rel='stylesheet' />
+	</head>
+	<body class='section-0'>
+
+		<div id='pane'><div id='map'></div></div>
+
+			<article>
+			  <section id='cover' class='cover active'>
+				<h1>The Fellowship of The Ring (Condensed)</h1>
+				<p>by J.R.R. Tolkien</p>
+			  </section>
+			  <section id='hobbiton'>
+				<h2>It All Started in Hobbiton</h2>
+				<p>Frodo gets the ring and Gandalf tells Frodo to take it to the elves, he is to meet him at the Inn in Bree (Sam follows).</p>
+			  </section>
+			  <section id='maggot'>
+				<h2>To Farmer Maggot's Farm</h2>
+				<p>On the way Frodo and Sam meet up with Merry and Pippin who are steal.</p>
+			  </section>
+			  <section id='bree'>
+				<h2>Onward to Bree</h2>
+				<p>They head to Bree to meet up with Gandalf and encounter the Wring Wraiths and narrowly escape. Later on in Bree they Meet Strider and he informs them they are in danger and leads them out of Bree</p>
+			  </section>
+			  <section id='weathertop'>
+				<h2>The Witch-king of Angmar</h2>
+				<p>Frodo is stabbed by the Witch-king of Angmar (with the help of Strider and Arwin they make it to Rivendell and Frodo is healed).</p>
+			  </section>
+			  <section id='rivendell'>
+				<h2>The Council of Elrond</h2>
+				<p>They all make it to Rivendell. At the Council of Elrond it is decided the ring must be taken to Mordor and destroyed by being cast into the fires of Mount Doom. A fellowship is created out of 9 unlikely companions: four Hobbits, two Men, one Elf, one Dwarf, and one Istar wizard. This number was chosen to match the number of Ring Wraiths.</p>
+			  </section>
+			  <section id='moria'>
+				<h2>The Mines of Moria</h2>
+				<p>The Fellowship sets out from Rivendell to destroy the ring and come across many hardships. Frodo tells them that he wishes to travel by the way of Moria and under the mountain. They meet several people on there way and Gandalf Dies</p>
+			  </section>
+			  <section id='lothlorien'>
+				<h2>Foretelling of the Future</h2>
+				<p>Along the way they also meet Galadriel, the co-ruler and Lady of Lothlórien. She gives them advice and gifts and then they depart. They take boats through the river and later dock at Argonath.</p>
+			  </section>
+			  <section id='argonath'>
+				<h2>The Breaking of the Fellowship</h2>
+				<p>The party splits up into different groups. Boromir dies, Merry and Pippin are taken by the orcs, Aragorn, Gimli, and Legolas chase after the orcs to save them. And Frodo and Sam head out by themselves to Mordor.</p>
+				</section>
+			  <section id='footer'>
+				<small class='footer'>
+				  Adapted from <a href='http://www.amazon.com/J-R-R-Tolkien-Boxed-Hobbit-Rings/dp/0345340426/ref=cm_lmf_tit_1'>J.R.R. Tolkien</a><br/>
+				  Map data &copy; <a href='gplus.to/hakarune'>Hakarune</a><br/>
+				  Original Map &copy; <a href='http://tolkiengateway.net/'>Chris Taylor</a><br/>
+				  Map designed with &copy; <a href='http://mapbox.com/about/maps/'>MapBox</a>
+				</small>
+			  </section>
+			</article>
+
+		<script>
+			var geojson = [
+			  { "geometry": { "type": "Point", "coordinates": [-65, 45] },
+				"properties": { "id": "cover", "zoom": 4 } },
+			  { "geometry": { "type": "Point", "coordinates": [-77.6953, 44.653] },
+				"properties": { "id": "hobbiton" } },
+			  { "geometry": { "type": "Point", "coordinates": [-72.9712, 42.261] },
+				"properties": { "id": "maggot" } },
+			  { "geometry": { "type": "Point", "coordinates": [-59.2383, 43.5804] },
+				"properties": { "id": "bree" } },
+			  { "geometry": { "type": "Point", "coordinates": [-44.7803, 44.7779] },
+				"properties": { "id": "weathertop" } },
+			  { "geometry": { "type": "Point", "coordinates": [-9.9976, 45.8288] },
+				"properties": { "id": "rivendell" } },
+			  { "geometry": { "type": "Point", "coordinates": [-17.6221, 22.1467] },
+				"properties": { "id": "moria" } },
+			  { "geometry": { "type": "Point", "coordinates": [-1.3623, 14.0513] },
+				"properties": { "id": "lothlorien" } },
+			  { "geometry": { "type": "Point", "coordinates": [20.6543, -23.6043] },
+				"properties": { "id": "argonath" } },
+			  { "geometry": { "type": "Point", "coordinates": [60, 20] },
+				"properties": { "id": "footer", "zoom": 3 } }
+			];
+			var tiles = mapbox.layer().tilejson({
+			  tiles: [ "http://a.tiles.mapbox.com/v3/hakarune.Middle-Earth/{z}/{x}/{y}.png" ]
+			});
+			var icons = mapbox.markers.layer()
+			  // Load up markers from geojson data.
+			  .features(geojson)
+			  // Define a new factory function. Takes geojson input and returns a
+			  // DOM element that represents the point.
+			  .factory(function(f) {
+				var el = document.createElement('div');
+				el.className = 'icon icon-' + f.properties.id;
+				return el;
+			  });
+
+			// Creates the map with tile and marker layers and
+			// no input handlers (mouse drag, scrollwheel, etc).
+			var map = mapbox.map('map', [tiles, icons], null, []);
+
+			// Array of story section elements.
+			var sections = document.getElementsByTagName('section');
+
+			// Array of marker elements with order matching section elements.
+			var markers = _(sections).map(function(section) {
+			  return _(icons.markers()).find(function(m) {
+				return m.data.properties.id === section.id;
+			  });
+			});
+
+			// Helper to set the active section.
+			var setActive = function(index, ease) {
+			  // Set active class on sections, markers.
+			  _(sections).each(function(s) { s.className = s.className.replace(' active', '') });
+			  _(markers).each(function(m) { m.element.className = m.element.className.replace(' active', '') });
+			  sections[index].className += ' active';
+			  markers[index].element.className += ' active';
+
+			  // Set a body class for the active section.
+			  document.body.className = 'section-' + index;
+
+			  // Ease map to active marker.
+			  if (!ease) {
+				map.centerzoom(markers[index].location, markers[index].data.properties.zoom||6);
+			  } else {
+				map.ease.location(markers[index].location).zoom(markers[index].data.properties.zoom||6).optimal(0.7, 1.00);
+			  }
+
+			  return true;
+			};
+
+			// Bind to scroll events to find the active section.
+			window.onscroll = _(function() {
+			  // IE 8
+			  if (window.pageYOffset === undefined) {
+				var y = document.documentElement.scrollTop;
+				var h = document.documentElement.clientHeight;
+			  } else {
+				var y = window.pageYOffset;
+				var h = window.innerHeight;
+			  }
+
+			  // If scrolled to the very top of the page set the first section active.
+			  if (y === 0) return setActive(0, true);
+
+			  // Otherwise, conditionally determine the extent to which page must be
+			  // scrolled for each section. The first section that matches the current
+			  // scroll position wins and exits the loop early.
+			  var memo = 0;
+			  var buffer = (h * 0.3333);
+			  var active = _(sections).any(function(el, index) {
+				memo += el.offsetHeight;
+				return y < (memo-buffer) ? setActive(index, true) : false;
+			  });
+
+			  // If no section was set active the user has scrolled past the last section.
+			  // Set the last section active.
+			  if (!active) setActive(sections.length - 1, true);
+			}).debounce(10);
+
+			// Set map to first section.
+			setActive(0, false);
+		</script>
+			
+	</body>
+</html>
